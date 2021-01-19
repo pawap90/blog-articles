@@ -1,27 +1,30 @@
 ---
-title: Adding shortcuts to your Chrome Extension in 2 steps
+title: Adding shortcuts to your Chrome Extension
 published: false
 description: Learn how to add keyboard shortcuts to your chrome extension using Commands.
 tags: webdev, javascript, chromeextension, chrome
-//cover_image: https://banner-url.png
+cover_image: https://i.imgur.com/jCgXmcU.png
 series: chrome-extensions
 ---
 
 Last week I wrote an article explaining [how to create a simple chrome extension](https://dev.to/paulasantamaria/creating-a-simple-chrome-extension-36m). Today I'm going to add a new feature to the same extension we built last week: **Keyboard shortcuts**.
 
-We will add two shortcuts: One to open the browser action we created in the previous article and one to duplicate the current tab. Using these 2 examples we will learn how to add different types of shortcuts to our extension.
+We will add two shortcuts: One to open the browser action we created in the previous article and one to duplicate the current tab.  The shortcuts will be `Alt + Shift + 1` and `Alt + Shift + 2`.
+Using these 2 examples we will learn how to add different types of shortcuts to our extension. 
+
+![A diagram displaying the two shortcuts we will add to our extension](https://i.imgur.com/FNlTxV3.jpg)
 
 # Commands API
 
 To create a keyboard shortcut for our extension we must use the **commands API.** Through this API we can define *commands* for our extension and bind them to *keyboard shortcuts*. When someone uses the shortcut, the command will be triggered and the logic we added to the command will be executed.
 
-Commands must be added to the `manifest.json` file along with their suggested keyboard shortcut.  Multiple commands can be defined in the `manifest.json`, however, only 4 shortcuts can be *suggested* by our extension. The user can bind the other commands to a keyboard shortcut from the browser (chrome://extensions/shortcuts).
+Commands must be added to the `manifest.json` file along with their suggested keyboard shortcut.  Multiple commands can be defined in the `manifest.json`, however, only 4 shortcuts can be *suggested* by our extension. The user can bind the other commands to a keyboard shortcut from the browser (`chrome://extensions/shortcuts`).
 
+> **Available keys**
 > Any keyboard shortcut must use either `Ctrl` (`Command` in Mac) or `Alt` but cannot include both. `Shift` can also be used. Other supported keys: `A-Z`, `0-9`, `Comma`, `Period`, `Home`, `End`, `PageUp`, `PageDown`, `Space`, `Insert`, `Delete`, Arrow keys (`Up`, `Down`, `Left`, `Right`) and the Media Keys (`MediaNextTrack`, `MediaPlayPause`, `MediaPrevTrack`, `MediaStop`).
+> **Examples:** `Ctrl + Shift + L`, `Alt + Shift + L`  `Command + ,`  `Ctrl + Shift + 1`
 
-> Examples: `Ctrl + Shift + L`, `Alt + Shift + L`  `Command + ,`  `Ctrl + Shift + 1`
-
-Keep in mind that you cannot use commands that are already reserved by the browser like `Ctrl + T`   (which in Chrome opens a new tab).
+Keep in mind that you cannot use commands that are already reserved by the browser like `Ctrl + T` (which in Chrome opens a new tab).
 
 The logic that should be executed once the user executes a command should be handled in a *background script*. I'll explain more about this later.
 
@@ -47,7 +50,7 @@ To define a command we should use the `commands` property in our `manifest.json`
                 "default": "Ctrl+Shift+1",
                 "mac": "Command+Shift+1"
             },
-            "description": "Duplicates the current active tab because... why not?"
+            "description": "Duplicates the currently active tab because... why not?"
         }
     }
 }
@@ -113,6 +116,9 @@ function duplicateTab() {
 ```
 
 > Notice that I didn't include a `case` for the `_execute_browser_action` command because, as we said before, that command is handled automatically by chrome.
+
+## Done!
+Now when the user executes `Alt + Shift + 1` the browser action will be open and when they use the shortcut `Alt + Shift + 2` the current tab will be duplicated.
 
 # The repo
 
