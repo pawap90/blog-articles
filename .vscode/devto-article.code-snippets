@@ -8,10 +8,11 @@
 			"published: ${2:false}",
 			"description: $3",
 			"tags: $4",
-			"//cover_image: ${5:https://banner-url.png}",
-			"//series: ${6:series-name}",
+			"${5://}cover_image: ${6:https://banner-url.png}",
+			"${7://}series: ${8:series-name}",
 			"---",
-			"$7"
+			"",
+			"$9"
 		],
 		"description": "Log output to console"
 	}
