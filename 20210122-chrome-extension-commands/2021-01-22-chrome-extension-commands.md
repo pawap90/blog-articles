@@ -1,16 +1,17 @@
 ---
 title: Adding shortcuts to your Chrome Extension
-published: false
+published: true
 description: Learn how to add keyboard shortcuts to your chrome extension using Commands.
 tags: webdev, javascript, chromeextension, chrome
 cover_image: https://i.imgur.com/jCgXmcU.png
 series: chrome-extensions
 ---
 
-Last week I wrote an article explaining [how to create a simple chrome extension](https://dev.to/paulasantamaria/creating-a-simple-chrome-extension-36m). Today I'm going to add a new feature to the same extension we built last week: **Keyboard shortcuts**.
+Last week I wrote an article explaining [how to create a simple chrome extension](https://dev.to/paulasantamaria/creating-a-simple-chrome-extension-36m). Today we are going to work on a new feature: **Keyboard shortcuts**.
 
-We will add two shortcuts: One to open the browser action we created in the previous article and one to duplicate the current tab.  The shortcuts will be `Alt + Shift + 1` and `Ctrl/Command + Shift + 2`.
-Using these 2 examples, we will learn how to add different types of shortcuts to our extension. 
+We will add two shortcuts: 
+- `Alt + Shift + 1` will open our browser action 
+- `Ctrl/Command + Shift + 2` will duplicate the current tab
 
 ![A diagram displaying the two shortcuts we will add to our extension](https://i.imgur.com/ABHf9Dt.jpg)
 
@@ -27,12 +28,12 @@ Using these 2 examples, we will learn how to add different types of shortcuts to
 
 # Commands API
 
-To create a keyboard shortcut for our extension, we must use the **commands API.** Through this API, we can define *commands* for our extension and bind them to *keyboard shortcuts*. When someone uses the shortcut, the command will be triggered, and the logic we added to the command will be executed.
+To create a keyboard shortcut for our extension, we must use the **commands API.** Through this API, we can define *commands* and bind them to *a combination of keys*. When someone uses the shortcut, the command will be triggered, and the appropriate logic will be executed.
 
-Commands must be added to the `manifest.json` file along with their suggested keyboard shortcut.  Multiple commands can be defined in the `manifest.json`. However, only 4 shortcuts can be *suggested* by our extension. The user can bind the other commands to a keyboard shortcut from the browser (`chrome://extensions/shortcuts`).
+We must declare our commands in the `manifest.json` file along with their suggested keyboard shortcut. We can define multiple commands in the `manifest.json`. However, only 4 shortcuts can be *suggested* by our extension. The user can bind the other commands to a keyboard shortcut from the browser (`chrome://extensions/shortcuts`).
 
 > **Available keys**
-> Any keyboard shortcut must use either `Ctrl` (`Command` in Mac) or `Alt` but cannot include both. `Shift` can also be used. 
+> Any keyboard shortcut must use either `Ctrl` (`Command` in Mac) or `Alt` but cannot include both. We can also use `Shift`.
 
 >Other supported keys: `A-Z`, `0-9`, `Comma`, `Period`, `Home`, `End`, `PageUp`, `PageDown`, `Space`, `Insert`, `Delete`, Arrow keys (`Up`, `Down`, `Left`, `Right`) and the Media Keys (`MediaNextTrack`, `MediaPlayPause`, `MediaPrevTrack`, `MediaStop`).
 
@@ -40,7 +41,7 @@ Commands must be added to the `manifest.json` file along with their suggested ke
 
 Keep in mind that you cannot use commands *reserved* by the browser, like `Ctrl + T` (which in Chrome opens a new tab).
 
-The logic that should be executed once the user runs a command should be handled in a *background script*. I will explain more about this later.
+We should handle the logic that we want to execute once the user runs a command in a *background script*. I will explain more about this later.
 
 # Let's get coding
 
@@ -81,9 +82,9 @@ To handle the logic for our `duplicate-tab` command, we will need a *background 
 
 >**About background scripts**
 
->Background scripts are used mainly to listen to events from the browser and trigger a reaction.  These scripts will stay running while they perform their tasks after some event was fired, and then they will be unloaded.
+>The purpose of Background scripts is usually to listen to events from the browser and trigger a reaction.  These scripts will stay running while they perform their tasks after some event was fired, and then they will be unloaded.
 
-To include our background script, we must modify our `manifest.json` file and define the script using the `background` property, like so:
+To include our background script, we must modify our `manifest.json` file and define it using the `background` property, like so:
 
 ```json
 {
@@ -103,7 +104,7 @@ Finally, let's add a new file called `background.js` in our project's root.
 
 ## 3. Listen for the command event
 
-For our command to be properly handled, we need to listen to the `onCommand` event in our background script and execute the appropriate logic once our command is called.
+For our command to be properly handled, we need to listen to the `onCommand` event in our background script and execute the appropriate logic once our `duplicate-tab` is called.
 
 So we will listen to the event and call the `duplicateTab` function when the `duplicate-tab` command is called:
 
