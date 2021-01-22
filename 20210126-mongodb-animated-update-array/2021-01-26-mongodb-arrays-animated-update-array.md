@@ -13,10 +13,10 @@ Welcome to the second post in my series "MongoDB Animated 🍩", where I provide
 - [Updating elements](#updating-elements)
     - [Updating all elements with $[]](#updating-all-elements-with-)
     - [Updating the first element with $](#updating-the-first-element-with-)
-    - [Update elements that match a filter with $[<identifier>]](#update-elements-that-match-a-filter-with-identifier)
+    - [Update elements that match a filter with $[\<identifier\>]](#update-elements-that-match-a-filter-with-identifier)
 - [Try it yourself](#try-it-yourself)
 - [Resources](#resources)
-- [Looking for feedback 💬](#looking-for-feedback-)
+- [Looking for your feedback! 💬](#looking-for-your-feedback-)
 
 # Introduction 
 
@@ -57,7 +57,7 @@ Another way to take away the glazing could be by removing the property `glazing`
 This can be done using the `$unset` operator in combination with the **all positional operator** `$[]`:
 
 ```js
-db.donutCombos.updateMany({ active: false }, { 
+db.donutCombos.updateMany({ active: true }, { 
     $unset: { 
         'donuts.$[].glazing': 1 
     } 
@@ -94,12 +94,12 @@ db.donutCombos.updateMany({ 'donuts.color': 'white' }, {
 
 // TODO: Gif
 
-### Update elements that match a filter with $[<identifier>]
+### Update elements that match a filter with $[\<identifier\>]
 To update a set of elements matching certain filters, we must use the **filtered positional operator** `$[<identifier>]`  where `<identifier>` is a placeholder for a value that represents a single element of the array.
 
 We must then use the third parameter (options) of the `updateMany` method to specify a set of `arrayFilters`. Here we will define the conditions each array element we want to update must meet to be updated.
 
-In the next example, we will change every pink donut color to green, only in the active documents.
+In the next example, we will change every white donut color to green, only in the active documents.
 
 ```js
 db.donutCombos.updateMany({ active: true }, { 
@@ -108,13 +108,15 @@ db.donutCombos.updateMany({ active: true }, {
     } 
 }, 
 { 
-    arrayFilters: [{ "donut.color": "pink" }] 
+    arrayFilters: [{ "donut.color": "white" }] 
 });
 ```
 
 // TO-DO gif
 
 Combining the **filtered positional operator** `$[<identifier>]` (or in our example `$[donut]`) with the operator `$unset`, we can remove a property from all elements in the array that match our `arrayFilter` criteria.
+
+For example, we could remove the color of every white donut in every active document:
 
 ```js
 db.donutCombos.updateMany({ active: true }, { 
@@ -123,7 +125,7 @@ db.donutCombos.updateMany({ active: true }, {
     } 
 }, 
 { 
-    arrayFilters: [{ "donut.color": "pink" }] 
+    arrayFilters: [{ "donut.color": "white" }] 
 });
 ```
 
@@ -146,5 +148,5 @@ For more info about updating arrays, here are a few resources from MongoDB's off
 
 - [Update Arrays in a Document (docs.mongodb.com)](https://docs.mongodb.com/drivers/node/fundamentals/crud/write-operations/embedded-arrays)
 
-# Looking for feedback 💬
+# Looking for your feedback! 💬
 I'm interested in your feedback. Was this post useful? Would you like me to cover any other operation, so you don't *ever* have to google it again?
