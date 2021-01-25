@@ -1,9 +1,9 @@
 ---
 title: Chrome Extensions: Making changes to a web page
-published: false
+published: true
 description: Using content scripts to make changes to a web page.
 tags: chromeextension, chrome, webdev, javascript
-//cover_image: https://banner-url.png
+cover_image: https://i.imgur.com/C0uqCWT.gif
 series: chrome-extensions
 ---
 
