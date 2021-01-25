@@ -1,37 +1,48 @@
 ---
-title: Content scripts
+title: Chrome Extensions: Making changes to a web page
 published: false
-description: How to display a notification from a Chrome Extension attaching HTML to the web page with Content Scripts.
+description: Using content scripts to make changes to a web page.
 tags: chromeextension, chrome, webdev, javascript
 //cover_image: https://banner-url.png
 series: chrome-extensions
 ---
 
-In this post, I will focus on **Content Scripts** and how to use them to attach HTML to a web page using Chrome Extensions.
+In this post, I will focus on **content scripts** and how to use them to make changes to a web page. 
 
-- [About Content Scripts](#about-content-scripts)
-- [Our example](#our-example)
+The **main concepts** we will explore are:
+- Using content scripts to make changes to a web page.
+  - Attaching HTML
+  - Adding new styles
+- Sending messages between the background script and the content script
+- Accessing our extension's resources from the content script
+
+--- 
+**Table of contents**
+- [The example](#the-example)
+- [About content scripts](#about-content-scripts)
 - [Let's get coding!](#lets-get-coding)
-  - [1. Create a new Command](#1-create-a-new-command)
-  - [2. Register the Content Script](#2-register-the-content-script)
+  - [1. Create a new command](#1-create-a-new-command)
+  - [2. Register the content script](#2-register-the-content-script)
   - [3. Display the notification](#3-display-the-notification)
   - [Done!](#done)
 - [The repo](#the-repo)
 
-# About Content Scripts
-- Content scripts are files that **run in the same context as the web page** the user visited. Within these files, we can use **JavaScript** to access the web page elements, read its contents and make changes. We can also use **CSS** to add new styles to the web page.
-- We can also use these scripts to extract information from the page and send it to other scripts. Or receive messages from our extension.
-- Finally, content scripts have access to some of the chrome APIs, which allows us to do stuff like get the current URL, access the extension's storage, etc. 
-
-# Our example
-For this post's example, I will keep adding features to our base example extension: We will use **Content scripts** to display a notification at the bottom right of the page the user is visiting. 
-We will also rely on some of the things we learned previously in this series: A ** command** will trigger the notification that will be handled by our **Background Script**. Finally, the Background script will *message* the Content script, which will display the title of the page at the bottom-right:
+# The example
+For this post's example, I will keep adding features to our initial sample extension: We will use **content scripts** to display a notification at the bottom right of the currently active page. 
+We will also rely on what we learned previously in this series: A **command** will trigger the notification to be handled by our **background script**. Finally, the background script will *message* the **content script**, to activate the notification showing the title of the page at the bottom-right of the screen:
 
 ![A small portion of a DEV.to's web page appears, and the notification is displayed with the text "DEV Community"](https://i.imgur.com/rD5vZMv.gif)
 
+# About content scripts
+- Content scripts are files that **run in the same context as the web page** the user visited. 
+- They share access with the page's DOM.
+- Within these scripts, we can use **JavaScript** to access the web page elements, read its contents and make changes. And we can use **CSS** to add new styles to the web page.
+- They allow you to extract information from the page and send it to other scripts or receive messages from our extension.
+- Finally, content scripts have access to some of the chrome APIs, which allows us to do stuff like get the current URL, access the extension's storage, etc. 
+
 # Let's get coding!
 
-## 1. Create a new Command
+## 1. Create a new command
 In the previous post of this series, we added two commands to our example extension. Now we are going to add a third one.
 To do that, first, we will define the command and it's suggested shortcut in the `manifest.json` file:
 
@@ -52,7 +63,7 @@ To do that, first, we will define the command and it's suggested shortcut in the
 }
 ```
 
-Now, we need to handle our command listening to the `onCommand` event. This should be done in the Background Script:
+Now, we need to handle our command by listening to the `onCommand` event. This should be done in the background script:
 
 ```js
 // background.js
@@ -77,15 +88,15 @@ function barkTitle() {
 }
 ```
 
-> **About Messages**: Content scripts don't run in the context of the extension but in the context of the web page. They need a way to communicating with the extension. That can be done via messages. 
-> - To send a message **to** a content script, use `chrome.tabs.sendMessage`  and specify the TabId. The message will be sent to the content script running in that tab.
-> - To send a message **from** a content script, use `chrome.runtime.sendMessage`. To receive the message.
+So, once the `bark` command is executed, we will send a *message* indicating the currently active tab's title. 
+Now our content script needs to listen to that message and display the notification.
 
-So, once the `bark` command is executed, we will send a *message* indicating the title of the currently active tab's title. 
-Now our Content Script needs to listen to that message and display the notification.
+> **About Messages**: Content scripts don't run in the context of the extension but in the context of the web page. They need a way to communicating with the extension. We can do that using *messages*. 
+> - To send a message **to** a content script, use `chrome.tabs.sendMessage`  and specify the `TabId`. The message will be sent to the content script running in that tab.
+> - To send a message **from** a content script, use `chrome.runtime.sendMessage`. 
 
-## 2. Register the Content Script 
-To create a Content Script, the first thing we need to do is (yes, you guessed it!) add it to the `manifest.json` file:
+## 2. Register the content script 
+To create a content script, the first thing we need to do is (yes, you guessed it!) add it to the `manifest.json` file:
 
 ```json
 {
@@ -106,9 +117,9 @@ To create a Content Script, the first thing we need to do is (yes, you guessed i
 ```
 - `content_scripts`: An array of content scripts. We can register multiple scripts, each with different configurations.
 - `matches`: An array of string expressions that specify which pages will this particular content script be injected into. You can use `"matches": ["<all_urls>"]` to inject it in any URL.
-- `js`: An array of javascript files. Where our Content script's logic will live.
-- `css`: An array of CSS files. We can inject our own styles into the web page. We will need it to add the styles for our notification.
-- `web_accessible_resources`: A list of resources we will need to use from our content scripts. Since the Content script runs in a different context than the extension, any extension resource we want to access from the Content Script must be explicitly made available here.
+- `js`: An array of javascript files. These files will handle the logic for our content scripts.
+- `css`: An array of CSS files. In this case, we will use a CSS file to define our notification styles.
+- `web_accessible_resources`: A list of resources we will need to access from our content scripts. Since the content script runs in a different context than the extension, any extension resource we want to access must be explicitly made available here.
 
 ## 3. Display the notification
 Let's start by adding the logic to `content.js`:
@@ -154,10 +165,10 @@ Now let's inspect the previous code more carefully:
 - Next, we add a `p` element where we will later attach the notification text.
 - Finally, we append the notification to the web page's body.
 
-These first 15 lines of code will ensure that every page we load has the structure for our notification. To finally display the notification, we added a listener for the `chrome.runtime.onMessage`. Let's inspect that code:
+These first 15 lines will ensure that every page loaded has our notification structure. To finally display the notification, we added a listener for the `chrome.runtime.onMessage`. Let's inspect that code:
 
 - Once we receive the message, the first thing to do is find the notification's structure within the current web page. We use `document.getElementsByClassName` to get the notification's body, and from there we get the `p` element inside it using `getElementsByTagName`.
-- Remember that the message that our `background.js` script sent includes the tabTitle, so we use that value from `request.tabTitle` and set it as the content of the notification's text element.
+- Remember that the message sent by our `background.js` script includes the `tabTitle`, so we use that value from `request.tabTitle` and set it as the content of the notification's text element.
 - We make sure our notification is visible by setting the `display` property to `flex`.
 - Finally, we use `setTimeout` to hide the notification again after 5 seconds.
 
