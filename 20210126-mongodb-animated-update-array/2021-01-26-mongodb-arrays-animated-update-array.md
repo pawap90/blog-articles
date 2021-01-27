@@ -7,7 +7,7 @@ cover_image: https://i.imgur.com/bsIvu2X.png
 series: mongodb-animated
 ---
 
-Welcome to the second post in my series "MongoDB Animated 🍩", where I provide animated examples and explanations for MongoDB operations that I don't ever want to google again.
+Welcome to the second post in my "MongoDB Animated 🍩" series, where I provide animated examples and explanations for MongoDB operations that I don't ever want to google again.
 
 - [Introduction](#introduction)
 - [Updating elements](#updating-elements)
@@ -39,7 +39,7 @@ I'll use the same example collection used in the previous article in this series
 # Updating elements
 
 ### Updating all elements with $[]
-Using `$set` operator combined with the **all positional operator** `$[]` allows us to update all elements in the array. 
+Using the `$set` operator combined with the **all positional operator** `$[]` allows us to update all the array elements. 
 
 For example, let's say we want to take away the glazing from all donuts in all active documents:
 
@@ -51,7 +51,9 @@ db.donutCombos.updateMany({ active: true }, {
 });
 ```
 
-// TODO - Gif
+![](https://i.imgur.com/shQ5VEd.gif)
+
+> This sort of operation can come in handy when you migrate to a new schema and your documents have embedded arrays. For example, if you needed to add a new property with a default value to all the array elements.
 
 Another way to take away the glazing could be by removing the property `glazing` from all donuts in all active documents.
 This can be done using the `$unset` operator in combination with the **all positional operator** `$[]`:
@@ -63,10 +65,10 @@ db.donutCombos.updateMany({ active: true }, {
     } 
 });
 ```
-> Notice that, inside the `$unset` object, we must define the key (the property we want to remove) and the value, which doesn't impact the operation. In this case, we used "1" for the value, but you can also use an empty string, for example: `'donuts.$[].glazing': ''`.
+> Notice that, inside the `$unset` object, we must define the key (the property we want to remove) and the value, which doesn't impact the operation. In this case, we used "1", but you can also use an empty string, for example: `'donuts.$[].glazing': ''`.
 
 ### Updating the first element with $
-You may need to update only *the first element* of your array. In that case, you should use the **positional operator `$`**. This positional operator will allow us to apply our changes in the first element that matches the `query document` (the first parameter of the `update` method). The array field must be a part of the `query document`.
+You may need to update only *the first element* of your array. In that case, you should use the **positional operator `$`**. This positional operator will allow us to apply changes to the first element that matches the `query document` (the first parameter of the `update` method). The array field must be a part of the `query document`.
 
 By combining the `$` positional operator with `$set`, we can update properties from the first array element that matches our `query document`. 
 
@@ -79,7 +81,7 @@ db.donutCombos.updateMany({ 'donuts.color': 'white' }, {
 });
 ```
 
-// TODO: Gif
+![](https://i.imgur.com/0aC61sd.gif)
 
 The `$` positional operator can also be combined with `$unset` to remove a property from the first array element that matches our `query document`:
 
@@ -92,7 +94,7 @@ db.donutCombos.updateMany({ 'donuts.color': 'white' }, {
 });
 ```
 
-// TODO: Gif
+![](https://i.imgur.com/yUQC3ek.gif)
 
 ### Updating elements that match a filter with $[\<identifier\>]
 To update a set of elements matching certain filters, we must use the **filtered positional operator** `$[<identifier>]`  where `<identifier>` is a placeholder for a value that represents a single element of the array.
@@ -112,7 +114,7 @@ db.donutCombos.updateMany({ active: true }, {
 });
 ```
 
-// TO-DO gif
+![](https://i.imgur.com/CPX9why.gif)
 
 Combining the **filtered positional operator** `$[<identifier>]` (or in our example `$[donut]`) with the operator `$unset`, we can remove a property from all elements in the array that match our `arrayFilter` criteria.
 
@@ -128,8 +130,6 @@ db.donutCombos.updateMany({ active: true }, {
     arrayFilters: [{ "donut.color": "white" }] 
 });
 ```
-
-// TO-DO gif
 
 # Try it yourself
 
@@ -149,4 +149,4 @@ For more info about updating arrays, here are a few resources from MongoDB's off
 - [Update Arrays in a Document (docs.mongodb.com)](https://docs.mongodb.com/drivers/node/fundamentals/crud/write-operations/embedded-arrays)
 
 # Looking for your feedback! 💬
-I'm interested in your feedback. Was this post useful? Would you like me to cover any other operation, so you don't *ever* have to google it again?
+I'm interested in your feedback. Was this post useful? Would you like me to cover any other operation so you don't *ever* have to google it again?
