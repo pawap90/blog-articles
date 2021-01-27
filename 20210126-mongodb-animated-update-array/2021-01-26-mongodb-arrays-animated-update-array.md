@@ -133,7 +133,7 @@ db.donutCombos.updateMany({ active: true }, {
 
 # Try it yourself
 
-I created a repo to try MongoDB queries in memory using Node.js with Jest and MongoDB Node driver. I use tests to execute the query and verify if everything was correctly updated. I also included a logger that prints the updated documents in the console displaying the changes that were applied using diff highlight syntax:
+I created a repo to try MongoDB queries in memory using Node.js with Jest and MongoDB Node driver. I used tests to execute the query and verify that everything was correctly updated. I also included a logger that prints the updated documents in the console displaying the changes that were applied using diff highlight syntax:
 
 ![The difference of a MongoDB document after being updated](https://i.imgur.com/8yGmVkY.png)
 
