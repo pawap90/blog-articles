@@ -1,6 +1,6 @@
 ---
 title: MongoDB Animated 🍩: Updating elements in arrays
-published: false
+published: true
 description: An animated guide on updating elements from embedded arrays in MongoDB, so you don't ever have to google that again.
 tags: mongodb, database, array
 cover_image: https://i.imgur.com/bsIvu2X.png
