@@ -1,9 +1,9 @@
 ---
 title: Mastering NPM Scripts
 published: false
-description: 
+description: In this article I'll share with you my research about how to take full advantage of NPM scripts.
 tags: javascript, node, npm
-//cover_image: https://banner-url.png
+cover_image: https://i.imgur.com/oKamQoX.png
 ---
 
 You may have come across the `scripts` property in the `package.json` file, and even write some scripts yourself. But do you know all you can do with NPM Scripts? 
@@ -18,7 +18,7 @@ In this article I'll share with you my research about how to take full advantage
 - [Executing multiple scripts](#executing-multiple-scripts)
 - [Understanding errors](#understanding-errors)
 - [Run scripts silently 🤫](#run-scripts-silently-)
-  - [Log levels](#log-levels)
+  - [About Loglevels](#about-loglevels)
 - [Referencing scripts from files](#referencing-scripts-from-files)
 - [Pre & Post](#pre--post)
 - [Access environment variables](#access-environment-variables)
@@ -165,7 +165,7 @@ It can also be used as `-s`: `npm run <script> -s`
 
 > If we dont' want to get an error when the script doesn't exists, we can use `--if-present` instead: `npm run <script> --if-present`.
 
-## Log levels
+## About Loglevels
 We saw how we can reduce logs using `--silent` but what about getting even more detailed logs? Or something in between? 
 
 There are different log levels: "silent", "error", "warn", "notice", "http", "timing", "info", "verbose", "silly". The default is "notice". The log level determines which logs will be displayed in the output. Any logs of higher level than the currently defined will be shown. 
@@ -268,8 +268,8 @@ Example:
 ```json
 {
     "scripts": {
-        "lint:check": "",
-        "lint:fix" ""
+        "lint:check": "eslint .",
+        "lint:fix": "eslint . --fix"
     }
 }
 
