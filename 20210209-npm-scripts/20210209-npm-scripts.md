@@ -1,7 +1,7 @@
 ---
 title: Mastering NPM Scripts
 published: false
-description: In this article I'll share with you my research about how to take full advantage of NPM scripts.
+description: In this article, I'll share with you my research about how to take full advantage of NPM scripts.
 tags: javascript, node, npm
 cover_image: https://i.imgur.com/oKamQoX.png
 ---
@@ -27,6 +27,7 @@ In this article, I'll share my research about how to take full advantage of NPM 
 - [Naming conventions](#naming-conventions)
   - [Prefixes](#prefixes)
 - [Documentation](#documentation)
+- [Conclusion](#conclusion)
 
 
 # Introduction
@@ -93,7 +94,7 @@ As you can see, `npm run` prints both the name and the actual script for each sc
 # Built-in scripts and Aliases
 In the previous example, we created a *custom script* called `hello-world`, but that npm also supports some *built-in scripts* such as `test` and `start`.
 
-What's interesting about these scripts is that, unlike our custom scripts, they can be executed using *aliases*, which makes the complete command shorter and easier to remember. For example, all of the following commands will run the `test` script.
+Interestingly, unlike our custom scripts, these scripts can be executed using *aliases*, making the complete command shorter and easier to remember. For example, all of the following commands will run the `test` script.
 
 ```sh
 npm run-script test
@@ -167,7 +168,7 @@ It can also be used as `-s`: `npm run <script> -s`
 > ℹ️ If we dont' want to get an error when the script doesn't exists, we can use `--if-present` instead: `npm run <script> --if-present`.
 
 ## About Loglevels
-We saw how we can reduce logs using `--silent` but what about getting even more detailed logs? Or something in between? 
+We saw how we can reduce logs using `--silent`, but what about getting even more detailed logs? Or something in between? 
 
 There are different log levels: "silent", "error", "warn", "notice", "http", "timing", "info", "verbose", "silly". The default is "notice". The log level determines which logs will be displayed in the output. Any logs of a higher level than the currently defined will be shown. 
 
@@ -199,7 +200,7 @@ Consider this example:
 ```
 We use `node <script-path>` to execute JS files and `bash <script-path>` to execute bash files.
 
-Notice that for CMD and BAT files, you can't just call `scripts/helloworld.cmd`. You'll need to navigate to the folder using `cd` first. Otherwise, you'll get an error from NPM.
+Notice that you can't just call `scripts/helloworld.cmd` for CMD and BAT files. You'll need to navigate to the folder using `cd` first. Otherwise, you'll get an error from NPM.
 
 Another advantage of executing scripts from files is that, if the script is complex, it'll be easier to maintain in a separate file than in a single line inside the `package.json` file. 
 
@@ -323,6 +324,7 @@ There are no specific guidelines about how to name your scripts, but there are a
 Here's my take on the subject, based on my research:
 - Keep it **short**: If you take a look at Svelte's NPM Scripts, you'll notice that most script names are one word only. If we can manage to keep our script names short, it'll be easier to remember them when we need them.
 - Be **consistent**: You may need to use more than one word to name your script. In that case, choose a naming style and stick to it. It can be camelCase, kebab-case, or anything you prefer. But avoid mixing them. 
+
 ## Prefixes
 One convention that you may have seen is using a prefix and a colon to group scripts, for example, "build:prod". This is simply a naming convention. It doesn't affect your scripts' behavior but can be helpful to create groups of scripts that are easier to identify by their prefixes.
 
@@ -345,3 +347,8 @@ The documentation for each available script should include:
 - Description
 - Accepted arguments (optional)
 - Links to other documentation (optional): For example, if your script runs `tsc --build`, you may want to include a link to Typescript docs.
+
+# Conclusion
+This is all I managed to dig up about NPM Scripts. I hope you find it useful! I certainly learned a lot just by doing this research. It took me way more time than I thought it would, but it was totally worth it.
+
+Let me know if there's anything missing that you'll like to add to make this guide even more complete!
