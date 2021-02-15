@@ -92,7 +92,7 @@ As you can see, `npm run` prints both the name and the actual script for each sc
 > ℹ️ `npm run` is an alias for `npm run-script`, meaning you could also use `npm run-script hello-world`. In this article, we'll use `npm run <script>` because it's shorter.
 
 # Built-in scripts and Aliases
-In the previous example, we created a *custom script* called `hello-world`, but that npm also supports some *built-in scripts* such as `test` and `start`.
+In the previous example, we created a *custom script* called `hello-world`, but you should know that npm also supports some *built-in scripts* such as `test` and `start`.
 
 Interestingly, unlike our custom scripts, these scripts can be executed using *aliases*, making the complete command shorter and easier to remember. For example, all of the following commands will run the `test` script.
 
@@ -165,7 +165,7 @@ The `--silent` flag (short for `--loglevel silent`) can be helpful when you want
 
 It can also be used as `-s`: `npm run <script> -s`
 
-> ℹ️ If we dont' want to get an error when the script doesn't exists, we can use `--if-present` instead: `npm run <script> --if-present`.
+> ℹ️ If we don't want to get an error when the script doesn't exists, we can use `--if-present` instead: `npm run <script> --if-present`.
 
 ## About Loglevels
 We saw how we can reduce logs using `--silent`, but what about getting even more detailed logs? Or something in between? 
