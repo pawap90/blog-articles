@@ -3,7 +3,7 @@ title: Chrome extensions: Local storage
 published: false
 description: Let's explore how to store data locally in our Chrome extension
 tags: chromeextension, webdev, javascript, chrome
-//cover_image: https://banner-url.png
+cover_image: https://i.imgur.com/C7nejI9.png
 series: chrome-extensions
 ---
 
