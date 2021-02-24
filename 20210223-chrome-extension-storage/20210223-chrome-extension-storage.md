@@ -1,7 +1,7 @@
 ---
 title: Chrome extensions: Local storage
 published: false
-description: Let's explore how to store data locally in our Chrome extension
+description: Let's explore how to store data locally in our Chrome extension adding a new feature to our original example.
 tags: chromeextension, webdev, javascript, chrome
 cover_image: https://i.imgur.com/C7nejI9.png
 series: chrome-extensions
@@ -41,7 +41,7 @@ Since we already know how to reuse code in chrome extensions, we will create the
 - `clearPages`: Will remove all the pages from the storage.
 
 ## About the storage API
-The `chrome.storage` API allows us to store objects using a *key* that we will later use to retrieve said objects. This API is similar but a bit more robust than the `localStorage`, but it's not as powerful as an actual database, so we will need to manage some things ourselves.
+The `chrome.storage` API allows us to store objects using a *key* that we will later use to retrieve said objects. This API is a bit more robust than the `localStorage` API, but it's not as powerful as an actual database, so we will need to manage some things ourselves.
 
 To save an object we will define a *key-value pair* and use the `set` method. Here's an example:
 
@@ -187,12 +187,12 @@ class PageService {
 }
 ```
 
-A few things to note about this class:
+A few things to notice about this class:
 - We are using the `toPromise` function we talked about earlier.
 - We are storing an *array of `pages`*, so every time we add a new page to the storage, we need to **retrieve the entire array**, **add our new element** at the end **and replace the original array** in storage. This is one of a few options I came up with to work with arrays and the `chrome.storage` API since it doesn't allow me to directly push a new element to the array.
 
 # 3. Make our PageService available to our components
-As we saw in the previous posts of this series, we need to make some changes to allow our new class to be used by our extension's different components.
+As we saw in the previous posts of this series, we need to make some changes to allow our new class to be **used by our extension's** different components.
 
 First, we will add it as a script to our `popup.html` so we can later use it in `popup.js`:
 
@@ -215,7 +215,7 @@ First, we will add it as a script to our `popup.html` so we can later use it in 
 
 This will allow us to save pages, retrieve them and clear them from the *browser action*.
 
-And finally, we'll add it as a `background script` in our `manifest.json` so we can also call the `savePage` method from our background script when the user uses the shortcut:
+And finally, we'll add it as a `background script` in our `manifest.json` so we can also call the `savePage` method *from our background script* when the user uses the shortcut:
 
 ```json
 {
@@ -286,14 +286,16 @@ const displayPages = async () => {
 
 So in the previous code, we are using our three methods from `PageService` to add the current page to the storage, list the pages on the screen and allow the user to navigate them, and clear the list. 
 
-We use the `displayPages` method to display the pages, where we retrieve the list of pages and generate a `<li>` element and an `<a>` element for each page. It's important to notice that we need to override the `onclick` event on our `<a>` element because if we leave the default functionality, the extension will try to load the page *inside our popup*, which it's not what we want and it will cause an error. Instead, we create a new tab and navigate to the link using `chrome.tabs.create`.
+We use the `displayPages` method to display the pages: To do that we retrieve the list of pages and generate a `<li>` element and an `<a>` element for each page. It's important to notice that we need to override the `onclick` event on our `<a>` element because if we leave the default functionality, the extension will try to load the page *inside our popup*, which it's not what we want and it will cause an error. Instead, we create a new tab and navigate to the link using `chrome.tabs.create`.
 
 That's all we need to do to add the new feature to our popup.
 
-# 5. Saving tha page from the background script
- ow let's make sure the pages are also stored when we use the command shortcut. To achieve that all we need to do is call the `savePage` method when the user executes the command:
+# 5. Saving the page from the background script
+ Now let's make sure the pages are also stored when we use the command shortcut. To achieve that all we need to do is call the `savePage` method when the user executes the command:
 
  ```js
+ //background.js
+
  chrome.commands.onCommand.addListener(async (command) => {
     switch (command) {
         case 'duplicate-tab':
