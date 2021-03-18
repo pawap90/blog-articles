@@ -19,7 +19,7 @@ We'll later upload this file to the Chrome Developer Dashboard.
 To register as a Chrome Web Store developer, we'll need to access the [developer console](https://chrome.google.com/webstore/devconsole).
 Once we do that, we'll have to accept the Developer Agreement and Privacy Policies and pay the $5 registration fee (a one-time payment).
 
->Don't forget to access the Account panel and fill in your email address. If you don't, you won't be able to publish an extension.
+>Don't forget to access the Account panel and fill in your email address. If you don't, you won't be able to publish the extension.
 
 # 3. Publish the extension
 
