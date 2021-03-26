@@ -1,6 +1,6 @@
 ---
 title: Chrome Extensions: Migrating to Manifest v3
-published: false
+published: true
 description: In this post, we'll go through a brief overview of Manifest v3, and learn everything we need to know to migrate our sample extension.
 tags: chromeextension, javascript, chrome, manifestv3
 cover_image: https://i.imgur.com/MqB2Ckh.png
