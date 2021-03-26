@@ -3,13 +3,11 @@ title: Chrome Extensions: Migrating to Manifest v3
 published: false
 description: In this post, we'll go through a brief overview of Manifest v3, and learn everything we need to know to migrate our sample extension.
 tags: chromeextension, javascript, chrome, manifestv3
-//cover_image: https://banner-url.png
+cover_image: https://i.imgur.com/MqB2Ckh.png
 series: chrome-extensions
 ---
 
 **Manifest v3** has been available since the release of **Chrome 88** earlier this year. If you're planning on building a Chrome extension or if you're currently building one, you should learn about this new version of the Chrome Extensions Manifest in order to **benefit from the new features and vision.**
-
-When I started this series, I read about Manifest v3 and how it will be available in early 2021, and so I took some precautions to make the migration as easy as possible for my sample project, "Acho, where are we?". However, we'll still need to **make some changes** to successfully *migrating* it to the new Manifest v3.
 
 In this post, we'll go through a **brief overview of Manifest v3**, then we'll take a look at the **Migration Checklist** to learn everything we'll need to change to migrate our sample extension. Finally, we'll **apply the changes step by step** so at the end, our sample extension will be successfully migrated to Manifest v3!
 
@@ -23,7 +21,7 @@ As stated in the docs, Manifest v3 is a step forward in Chrome Extensions' strat
 - **Security**: Extensions will be required to follow stricter protocols, and, for example, they won't be allowed to access scripts from outside the extension context.
 - **Performance**: Keep good performance in all devices and avoid performance issues when extensions are installed.
 
-They also state that they will preserve the ** "webbiness"** of Chrome extensions to keep the barriers for developers low and benefit from the advances of the web.
+They also state that they will preserve the **"webbiness"** of Chrome extensions to keep the barriers for developers low and benefit from the advances of the web.
 
 Finally, they say the idea is to keep the platform **capable**, powerful, and feature-rich so developers can keep delivering value to users through it.
 
@@ -36,7 +34,9 @@ Much like background pages, service workers are scripts that run in the backgrou
 
 ### The new `declarativeNetRequest` API handles **Network request modification**.
 
-This new API is focused on privacy. The request will still be able to be modified and blocked in a privacy-preserving way. This API is an improvement from the old `webRequest` API that fixes privacy, performance, and compatibility issues.
+This new API is focused on privacy. The request will still be able to be modified and blocked, but in a privacy-preserving way. 
+
+This API is an improvement from the old `webRequest` API that fixes privacy, performance, and compatibility issues.
 
 ### Remotely-hosted code is no longer allowed
 This change came to improve security. Since all the code will be available in the extension package, extensions will be more reliably and efficiently reviewed before they are made available for the users.
@@ -45,18 +45,16 @@ The alternative recommended for extensions that require some feature to be handl
 
 ### Added **Promise support** for many APIs
 
-We can finally use promises in some of `chrome` APIs! This was something I was really looking forward to. 
+We can finally use promises in some of `chrome` APIs! 🎈 This was something I was really looking forward to. 
 
 Callbacks are still supported, so you don't need to refactor all your code right away. 
 
 ### Other minor changes
 - The `browserAction` API and `pageAction` API are now unified in a single API called `action`.
-- The **Web-accessible resources** are no longer available to all websites, allowing extensions to use fingerprinting* to track users.
+- The **Web-accessible resources** are no longer available to all websites, which allowed extensions to use fingerprinting to track users.
 - The method `executeScript()` was moved from the `tabs` API into a new `scripting` API and no longer allows string scripts. You must provide a script file path or a function.
 - Host permissions are specified separately from the `permissions` property in the `manifest.json`.
 - The `content_security_policy` used to be a string, now it's an object, and you must specify the extension pages (HTML files and service workers) covered by the policy.
-
-> * "Fingerprinting is a type of online tracking that's more invasive than ordinary cookie-based tracking. A digital fingerprint is created when a company makes a unique profile of you based on your computer hardware, software, add-ons, and even preferences. Your settings like the screen you use, the fonts installed on your computer, and even your choice of a web browser can all be used to create a fingerprint." - From [Mozilla](https://www.mozilla.org/en-US/firefox/features/block-fingerprinting)
 
 # 2. Migrating "Acho, where are we?" to Manifest v3
 
@@ -69,15 +67,15 @@ When migrating our extension to manifest v3, the first thing we should do is che
 ❌ Do you have host permissions in your manifest?
 
 ✅ Are you using background pages?
-    - Replace background.page or background.scripts with background.service_worker in manifest.json. Note that the service_worker field takes a string, not an array of strings.
-    - Remove `background.persistent` from `manifest.json`.
-    - Update background scripts to adapt to the service worker execution context.
+- Replace background.page or background.scripts with background.service_worker in manifest.json. Note that the service_worker field takes a string, not an array of strings.
+- Remove `background.persistent` from `manifest.json`.
+- Update background scripts to adapt to the service worker execution context.
 
 ✅ Are you using the browser_action or page_action property in manifest.json?
-    - Since these two APIs were unified into a single action API, we must replace these properties with action.
+- Since these two APIs were unified into a single action API, we must replace these properties with action.
 
 ✅ Are you using chrome.browserAction or chrome.pageAction JavaScript API?
-    - Migrate to the chrome.action API.
+- Migrate to the chrome.action API.
 
 ❌ Are you currently using the blocking version of chrome.webRequest?
 
@@ -110,15 +108,15 @@ The first change we need to do is rename the `background.js` script to `service-
 
 Now we'll set our new service worker in the `manifest.json` file. To do that, we must replace the old `background` property with the following:
 
-"`json
+```json
 "background": {
     "service_worker": "service-worker.js"
 },
 ```
 
-Now, notice that **the `service_worker` property is a string**. So *we can't declare more than one file* there (as far as I know, I didn't find much about this issue in the docs). Because of this change, I couldn't add the other two scripts I needed: `acho.js` and `page.service.js`. So I found a new way to include them and call them from `service-worker.js`: Simply use the `importScripts()` method at the top of my `service-worker.js` script:
+Now, notice that **the `service_worker` property is a string**. So *we can't declare more than one file* there (as far as I know, I didn't find much about this issue in the docs). Because of this change, I couldn't add the other two scripts I needed: `acho.js` and `page.service.js`. So I found a new way to include them and call them from `service-worker.js`: Simply use the `importScripts()` method at the top of the `service-worker.js` script:
 
-"`js
+```js
 // service-worker.js
 importScripts('acho.js', 'page.service.js');
 
@@ -127,10 +125,10 @@ importScripts('acho.js', 'page.service.js');
 
 You can see all the changes I applied to replace my background script with a service worker in [this commit](https://github.com/pawap90/acho-where-are-we/commit/185c939637ffea25db083b3381a84cf5c72d4ab9#diff-9d9dda0262cb14fb69febe39e1fcc19e6b2e02d6560efad8639ec5d2f152e9db).
 
-### 2.2.3. Replacing browser_action by action in the manifest
-Since these two APIs were unified into a single action API, we must change the property `browser_action` to `action` in our `manifest.json` file:
+### 2.2.3. Replacing "browser_action" by "action" in the manifest
+Since these two APIs were unified into a single `action` API, we must change the property `browser_action` to `action` in our `manifest.json` file:
 
-"`json
+```json
 {
     "action": {
         "default_popup": "popup.html",
@@ -145,12 +143,12 @@ Since these two APIs were unified into a single action API, we must change the p
 
 See the [commit](https://github.com/pawap90/acho-where-are-we/commit/9bfae96327a8be8a368012af398521013dbcab0c?branch=9bfae96327a8be8a368012af398521013dbcab0c).
 
-### 2.2.4. Use the action API instead of the browserAction API
+### 2.2.4. Use the "action" API instead of the "browserAction" API
 Similarly to the previous section, we must use the new unified `action` API. 
 
 In our sample extension, we had only used the `browserAction` API to set the badge color and text, so we'll replace those lines:
 
-"`js
+```js
 // acho.js
 
 class Acho {
@@ -171,16 +169,16 @@ class Acho {
 }
 ```
 
-> Note: The `text` property is now required in the `setBadge` method, so we can not longer use `chrome.action.setBadgeText({ });` to clear the badge text.
+> Note: The `text` property is now required in the `setBadge` method, so we can no longer use `chrome.action.setBadgeText({ });` to clear the badge text.
 
 See the [commit](https://github.com/pawap90/acho-where-are-we/commit/e745baff590c7c55c8ae2a4976964c69acf893b2#diff-9d9dda0262cb14fb69febe39e1fcc19e6b2e02d6560efad8639ec5d2f152e9db).
 
 ### 2.2.5. Specify an URL pattern for Web-accessible resources
-This one wasn't in the Checklist, but I realized I needed to make a change because when I tried the extension, I got an error that said: "Resources must be listed in the web_accessible_resources manifest key in order to be loaded by pages outside the extension".
+This one wasn't in the Checklist, but I realized I needed to make a change because when I tried the extension, I got an error that said: "Invalid value for 'web_accessible_resources[0]'. Entry must be a dictionary value".
 
-So, we must explicitly define which pages must have access to our resources. This is done via the `matches` property (similarly to content scripts). Here's how the new `web_accessible_resources` property looks like in the `manifest.json`:
+So, I figure out we must explicitly define which pages will have access to our resources. This is done via the `matches` property (similarly to content scripts). Here's how the new `web_accessible_resources` property looks like in the `manifest.json`:
 
-"`json
+```json
 {
     "web_accessible_resources": [
         {
@@ -193,14 +191,14 @@ So, we must explicitly define which pages must have access to our resources. Thi
 
 See the [commit](https://github.com/pawap90/acho-where-are-we/commit/4056176cf8cfbd654ee178bccc71aa8f162c82be#diff-9d9dda0262cb14fb69febe39e1fcc19e6b2e02d6560efad8639ec5d2f152e9db).
 
-### 2.2.6. Replace the command _execute_browser_action with _execute_action
+### 2.2.6. Replace the command "_execute_browser_action" with "_execute_action"
 This one wasn't in the Checklist either, and I also couldn't find anything related to this change in the docs, but I figure out the change through my own intuition 😂.
 
 We used to have a `command` defined in our `manifest.json` called `_execute_browser_action` that automatically (without adding any extra code) will trigger our extension's popup (browser action). 
 
 After updating to Manifest v3, this command wasn't working, and I figured it was because of the merge between `browserAction` and `pageAction` into the new `action` API. So I changed `_execute_browser_action` to `_execute_action`, and it worked 🎉.
 
-"`json
+```json
 {
     "commands": {
         "_execute_action": {
