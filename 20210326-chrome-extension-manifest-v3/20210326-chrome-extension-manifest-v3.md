@@ -100,7 +100,7 @@ In the `manifest.json` file, set the value of `manifest_version` to "3".
 
 As we replace our background page with a service worker, we must remember two things:
 - Service workers are **terminated when inactive** and **restarted when they're needed** again.
-- Service workers ** don't have access to the DOM**.
+- Service workers **don't have access to the DOM**.
 
 This won't be a problem for us since when I created our background script, I already knew this change was coming, and so I made sure to keep those 2 things in mind in the original design of my background script. 
 
