@@ -32,6 +32,8 @@ Much like background pages, service workers are scripts that run in the backgrou
 
 > ℹ️ Fun fact! Service workers were inspired by the background pages in Chrome Extensions.
 
+![An animated gif of Janet, from the series "The Good Place", saying "Fun fact: Janet is me"](https://media.giphy.com/media/l3mZ8A8zDS8pKKFgI/giphy.gif)
+
 ### The new `declarativeNetRequest` API handles **Network request modification**.
 
 This new API is focused on privacy. The request will still be able to be modified and blocked, but in a privacy-preserving way. 
