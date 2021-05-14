@@ -1,7 +1,7 @@
 ---
 title: Create games using TypeScript, Snowpack and ESLint with this template
 published: false
-description: 
+description: I created an open-source template to develop games using Phaser 3, TypeScript, Snowpack and ESLint.
 tags: showdev, gamedev, typescript
 cover_image: https://i.imgur.com/nPuFFZj.png
 ---
